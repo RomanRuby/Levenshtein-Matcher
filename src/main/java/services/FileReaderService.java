@@ -8,7 +8,7 @@ import java.util.List;
  */
 public interface FileReaderService {
 
-    List<String> readRow(String filePath) throws IOException;
+    List<String> readRow(String filePath);
 
     Boolean checkCorrectPathAndType(String filePathString);
 

@@ -9,10 +9,8 @@ import java.util.concurrent.ExecutionException;
 public class App {
 
     public static void main(String[] args) throws InterruptedException, ExecutionException, IOException {
-        ViewDisplay viewDisplay = new ViewDisplay();
-        viewDisplay.demonstrate();
+      new ViewDisplay().viewResult();
 
-        new ViewDisplay().demonstrate();
     }
 
 }

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,8 +16,12 @@ import java.util.List;
 public class DefaultFileReaderService implements FileReaderService {
 
     @Override
-    public List<String> readRow(String filePath) throws IOException {
-          return Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
+    public List<String> readRow(String filePath)  {
+        try {
+            return Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            return  new ArrayList<String>();
+        }
     }
 
     @Override

@@ -17,16 +17,27 @@ public enum MenuSettings {
                     "patterns.txt somewhere in the line."
                     + "\n 3 - mode output all the lines from input.txt that contain a match with " +
                     "edit distance <= 1 patterns.txt"
+                    + "\n 4 - end"
                     + "\n Input number:";
         }
     },
-
     RESULT_MENU {
         @Override
         public String toString() {
             return " "
                     + "\n Enter your option : "
-                    + "\n Press 1 - start "
+                    + "\n Press 1 - select mode "
+                    + "\n Press 1 - select files "
+                    + "\n 2 - end"
+                    + "\n Input number:";
+        }
+    },
+    FILES_MENU {
+        @Override
+        public String toString() {
+            return " "
+                    + "\n Enter your option : "
+                    + "\n Press 1 - choose files "
                     + "\n 2 - end"
                     + "\n Input number:";
         }
