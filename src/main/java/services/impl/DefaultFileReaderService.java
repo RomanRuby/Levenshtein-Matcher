@@ -1,6 +1,6 @@
 package services.impl;
 
-import displays.ViewDisplay;
+import views.ViewMenu;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import services.FileReaderService;
@@ -11,7 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 
 /**
@@ -19,23 +18,25 @@ import java.util.List;
  */
 public class DefaultFileReaderService implements FileReaderService {
 
-    private static final Logger LOGGER = LogManager.getLogger(ViewDisplay.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(ViewMenu.class.getName());
 
 
     @Override
-    public List<String> readRow(String filePath)  {
+    public List<String> readRows(String filePath)  {
         try {
             return Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
         } catch (IOException e) {
             LOGGER.info("Info Message Logged", new IOException(e.toString()));
-            return  new ArrayList<String>();
+            return  new ArrayList<>();
         }
     }
 
     @Override
-    public Boolean checkCorrectPathAndType(String filePathString) {
+    public void checkCorrectPathAndType(String filePathString) {
         File file = new File(filePathString);
-        return file.exists() && !(file.isDirectory());
+        if (!file.exists() || file.isDirectory()) {
+            throw new IllegalArgumentException("Invalid file path!");
+        }
     }
 
 }

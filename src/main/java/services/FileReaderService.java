@@ -1,6 +1,5 @@
 package services;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -8,8 +7,8 @@ import java.util.List;
  */
 public interface FileReaderService {
 
-    List<String> readRow(String filePath);
+    List<String> readRows(String filePath);
 
-    Boolean checkCorrectPathAndType(String filePathString);
+    void checkCorrectPathAndType(String filePathString);
 
 }
