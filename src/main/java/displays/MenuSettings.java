@@ -27,8 +27,8 @@ public enum MenuSettings {
             return " "
                     + "\n Enter your option : "
                     + "\n Press 1 - select mode "
-                    + "\n Press 1 - select files "
-                    + "\n 2 - end"
+                    + "\n Press 2 - select files "
+                    + "\n 3 - end"
                     + "\n Input number:";
         }
     },

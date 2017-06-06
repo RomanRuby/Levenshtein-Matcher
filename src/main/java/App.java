@@ -1,4 +1,4 @@
-import displays.ViewDisplay;
+import displays.ViewMenu;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 public class App {
 
     public static void main(String[] args) throws InterruptedException, ExecutionException, IOException {
-      new ViewDisplay().viewResult();
+      new ViewMenu().viewResult();
 
     }
 
