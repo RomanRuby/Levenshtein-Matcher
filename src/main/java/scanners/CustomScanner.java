@@ -23,6 +23,4 @@ public class CustomScanner {
         return instance;
     }
 
-    public void checkNextLine
-
 }

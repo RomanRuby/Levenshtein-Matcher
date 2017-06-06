@@ -43,6 +43,7 @@ public class ViewMenu {
 
             switch (input) {
                 case 1: {
+                    scanner.nextLine();
                     getModeMenu(loadFiles());
                     break;
                 }
@@ -51,6 +52,7 @@ public class ViewMenu {
                     break;
                 }
                 default:
+                    scanner.nextLine();
                     System.out.println("Choose right option!");
                     getMainMenu();
             }
@@ -70,16 +72,19 @@ public class ViewMenu {
             int input = scanner.nextInt();
             switch (input) {
                 case 1: {
+                    scanner.nextLine();
                     printResult(getResult(MatchingEnum.FullMatchMode, files));
                     getResultMenu(files);
                     break;
                 }
                 case 2: {
+                    scanner.nextLine();
                     printResult(getResult(MatchingEnum.EntryMatchMode, files));
                     getResultMenu(files);
                     break;
                 }
                 case 3: {
+                    scanner.nextLine();
                     printResult(getResult(MatchingEnum.LevensteinMatchMode, files));
                     getResultMenu(files);
                     break;
@@ -89,6 +94,7 @@ public class ViewMenu {
                     break;
                 }
                 default:
+                    scanner.nextLine();
                     System.out.println("Choose right option!");
                     getModeMenu(files);
             }
@@ -106,10 +112,12 @@ public class ViewMenu {
             int input = scanner.nextInt();
             switch (input) {
                 case 1: {
+                    scanner.nextLine();
                     getModeMenu(files);
                     break;
                 }
                 case 2: {
+                    scanner.nextLine();
                     getFilesMenu();
                     break;
                 }
@@ -118,6 +126,7 @@ public class ViewMenu {
                     break;
                 }
                 default:
+                    scanner.nextLine();
                     System.out.println("Choose right option!");
                     getResultMenu(files);
             }
@@ -160,6 +169,7 @@ public class ViewMenu {
 
     private void stop() {
         System.out.println("Good bye!");
+
         run = false;
     }
 
