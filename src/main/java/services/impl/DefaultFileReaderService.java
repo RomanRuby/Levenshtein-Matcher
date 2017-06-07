@@ -1,9 +1,9 @@
 package services.impl;
 
-import views.ViewMenu;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import services.FileReaderService;
+import views.ViewMenu;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,24 +19,28 @@ import java.util.List;
 public class DefaultFileReaderService implements FileReaderService {
 
     private static final Logger LOGGER = LogManager.getLogger(ViewMenu.class.getName());
+    private static FileReaderService fileReaderService;
 
+    public static FileReaderService getInstance() {
+        if (fileReaderService == null) {
+            fileReaderService = new DefaultFileReaderService();
+        }
+        return fileReaderService;
+    }
 
     @Override
-    public List<String> readRows(String filePath)  {
+    public List<String> readRows(String filePath) {
         try {
             return Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
         } catch (IOException e) {
             LOGGER.info("Info Message Logged", new IOException(e.toString()));
-            return  new ArrayList<>();
+            return new ArrayList<>();
         }
     }
 
     @Override
-    public void checkCorrectPathAndType(String filePathString) {
+    public boolean checkCorrectPathAndType(String filePathString)  {
         File file = new File(filePathString);
-        if (!file.exists() || file.isDirectory()) {
-            throw new IllegalArgumentException("Invalid file path!");
-        }
+        return (file.exists() && !file.isDirectory());
     }
-
 }

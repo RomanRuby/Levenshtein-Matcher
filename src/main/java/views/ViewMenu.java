@@ -1,12 +1,15 @@
 package views;
 
 import models.MatchingEnum;
-import scanners.CustomScanner;
+import org.apache.commons.lang3.StringUtils;
 import services.FileReaderService;
 import services.impl.DefaultFileReaderService;
+import threadScanners.InstanceScanner;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.HashMap;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Roman Nagibov
@@ -15,18 +18,22 @@ public class ViewMenu {
 
     private static final String INPUT_KEY = "input";
     private static final String PATTERN_KEY = "pattern";
-    private static ViewMenu viewDisplay;
-    private FileReaderService fileReaderService = new DefaultFileReaderService();
+    private static ViewMenu viewMenu;
+    private final InstanceScanner scanner = InstanceScanner.getInstance();
+    private final FileReaderService fileReaderService = DefaultFileReaderService.getInstance();
     private boolean run = true;
+    private String inputFile;
+    private String patternsFile;
 
+    private ViewMenu() {
 
-    private ViewMenu() {}
+    }
 
     public static ViewMenu getInstance() {
-        if (null == viewDisplay) {
-            viewDisplay = new ViewMenu();
+        if (null == viewMenu) {
+            viewMenu = new ViewMenu();
         }
-        return viewDisplay;
+        return viewMenu;
     }
 
     public void getMainMenu() {
@@ -36,56 +43,65 @@ public class ViewMenu {
     }
 
     private void getFilesMenu() {
-        Scanner scanner = fixScannerThread();
-        System.out.println(MenuTemplate.FILES_MENU.toString());
-        try {
-            int input = scanner.nextInt();
 
-            switch (input) {
-                case 1: {
-                    scanner.nextLine();
-                    getModeMenu(loadFiles());
-                    break;
-                }
-                case 2: {
-                    stop();
-                    break;
-                }
-                default:
-                    scanner.nextLine();
-                    System.out.println("Choose right option!");
-                    getMainMenu();
-            }
-        } catch (InputMismatchException ex) {
+        System.out.println(MenuTemplate.FILES_MENU.toString());
+
+
+        String row = scanner.readRow();
+        if (!StringUtils.isNumeric(row)) {
             System.out.println("Input must be number!");
             getFilesMenu();
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-            getFilesMenu();
         }
+        int input = Integer.valueOf(row);
+
+        switch (input) {
+            case 1: {
+                System.out.println("location input file with type txt ");
+                inputFile = getCorrectPath();
+
+                System.out.println("location patterns file with type txt");
+                patternsFile = getCorrectPath();
+                readFiles(inputFile, patternsFile);
+                break;
+            }
+            case 2: {
+                stop();
+                break;
+            }
+            default:
+                System.out.println("Choose right option!");
+                getMainMenu();
+        }
+
+    }
+
+    public String getCorrectPath() throws IllegalArgumentException {
+        String file = InstanceScanner.getInstance().readRow();
+    while(!loadFiles(file)) {
+        file = InstanceScanner.getInstance().readRow();
+        getFilePathMenu(file);
+    }
+        return file;
     }
 
     private void getModeMenu(Map<String, List<String>> files) {
-        Scanner scanner = fixScannerThread();
+
         System.out.println(MenuTemplate.MODE_MENU.toString());
         try {
-            int input = scanner.nextInt();
+            int input = Integer.valueOf(InstanceScanner.getInstance().readRow());
             switch (input) {
                 case 1: {
-                    scanner.nextLine();
                     printResult(getResult(MatchingEnum.FullMatchMode, files));
                     getResultMenu(files);
                     break;
                 }
                 case 2: {
-                    scanner.nextLine();
                     printResult(getResult(MatchingEnum.EntryMatchMode, files));
                     getResultMenu(files);
                     break;
                 }
                 case 3: {
-                    scanner.nextLine();
-                    printResult(getResult(MatchingEnum.LevensteinMatchMode, files));
+                    printResult(getResult(MatchingEnum.LevenshteinMatchMode, files));
                     getResultMenu(files);
                     break;
                 }
@@ -94,7 +110,6 @@ public class ViewMenu {
                     break;
                 }
                 default:
-                    scanner.nextLine();
                     System.out.println("Choose right option!");
                     getModeMenu(files);
             }
@@ -106,18 +121,15 @@ public class ViewMenu {
     }
 
     private void getResultMenu(Map<String, List<String>> files) {
-        Scanner scanner = fixScannerThread();
         System.out.println(MenuTemplate.RESULT_MENU.toString());
         try {
-            int input = scanner.nextInt();
+            int input = Integer.valueOf(InstanceScanner.getInstance().readRow());
             switch (input) {
                 case 1: {
-                    scanner.nextLine();
                     getModeMenu(files);
                     break;
                 }
                 case 2: {
-                    scanner.nextLine();
                     getFilesMenu();
                     break;
                 }
@@ -126,7 +138,6 @@ public class ViewMenu {
                     break;
                 }
                 default:
-                    scanner.nextLine();
                     System.out.println("Choose right option!");
                     getResultMenu(files);
             }
@@ -136,21 +147,35 @@ public class ViewMenu {
         }
     }
 
+    private void getFilePathMenu(String path) throws IllegalArgumentException {
+        System.out.println(MenuTemplate.FILES_PATH_MENU.toString());
+        try {
+            int input = Integer.valueOf(InstanceScanner.getInstance().readRow());
+            switch (input) {
+                case 1: {
+                    loadFiles(path);
+                    break;
+                }
+                case 2: {
+                    stop();
+                    break;
+                }
+                default:
+                    System.out.println("Choose right option!");
+            }
+        } catch (InputMismatchException ex) {
+            System.out.println("Input must be number!");
+        }
+    }
 
-    private Map<String, List<String>> loadFiles() {
-        System.out.println("Enter location input file with type txt");
-        String inputFilePath = fixScannerThread().nextLine();
-        fileReaderService.checkCorrectPathAndType(inputFilePath);
+    private boolean loadFiles(String path) throws IllegalArgumentException {
+        return fileReaderService.checkCorrectPathAndType(path);
+    }
 
-        System.out.println("Enter location patterns file with type txt");
-        String patternsFilePath = fixScannerThread().nextLine();
-        fileReaderService.checkCorrectPathAndType(patternsFilePath);
-
+    private Map<String, List<String>> readFiles(String inputPath, String patternsPath) {
         Map<String, List<String>> files = new HashMap<>();
-
-        files.put(INPUT_KEY, fileReaderService.readRows(inputFilePath));
-        files.put(PATTERN_KEY, fileReaderService.readRows(patternsFilePath));
-
+        files.put(INPUT_KEY, fileReaderService.readRows(inputPath));
+        files.put(PATTERN_KEY, fileReaderService.readRows(patternsPath));
         return files;
     }
 
@@ -166,23 +191,9 @@ public class ViewMenu {
         return mode.getMode().match(files.get(INPUT_KEY), files.get(PATTERN_KEY));
     }
 
-
     private void stop() {
         System.out.println("Good bye!");
-
+        InstanceScanner.getInstance().stopScannerThread();
         run = false;
     }
-
-    public Scanner fixScannerThread()  {
-        ExecutorService executor = Executors.newFixedThreadPool(1);
-        Future<Scanner> future = executor.submit(processingSearchMessage);
-        try {
-            return future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private Callable<Scanner> processingSearchMessage = () -> CustomScanner.getInstance().getScanner();
 }

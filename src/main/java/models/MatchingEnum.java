@@ -22,7 +22,7 @@ public enum MatchingEnum {
             return new EntryMatchService();
         }
     },
-    LevensteinMatchMode {
+    LevenshteinMatchMode {
         public MatchingCheckService getMode() {
 
             return new LevenshteinMatchService();

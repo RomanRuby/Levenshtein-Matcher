@@ -46,6 +46,16 @@ public enum MenuTemplate {
                     + "\n 2 - exit"
                     + "\n Input number:";
         }
+    },
+    FILES_PATH_MENU {
+        @Override
+        public String toString() {
+            return " "
+                    + "\n Enter your option : "
+                    + "\n 1 - location file"
+                    + "\n 2 - exit"
+                    + "\n Input number:";
+        }
     }
 
 }
