@@ -1,4 +1,4 @@
-package threadScanners;
+package scanners;
 
 import lombok.Data;
 import org.apache.logging.log4j.LogManager;
@@ -13,7 +13,7 @@ import java.util.concurrent.*;
 @Data
 public class InstanceScanner {
 
-    private static final Logger LOGGER = LogManager.getLogger(InstanceScanner.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(InstanceScanner.class);
     private static InstanceScanner instance;
     private Scanner scanner = new Scanner(System.in);
     private ExecutorService executor = Executors.newFixedThreadPool(1);
@@ -23,7 +23,7 @@ public class InstanceScanner {
     }
 
     public static InstanceScanner getInstance() {
-        if (instance == null) {
+        if (null == instance) {
             instance = new InstanceScanner();
         }
         return instance;
@@ -34,9 +34,9 @@ public class InstanceScanner {
         try {
             return future.get();
         } catch (InterruptedException | ExecutionException e) {
-            LOGGER.info("Info Message Logged", new InterruptedException(e.toString()));
+            LOGGER.info("Info Message Logged", e.getMessage());
+            return null;
         }
-        return null;
     }
 
     public void stopScannerThread() {

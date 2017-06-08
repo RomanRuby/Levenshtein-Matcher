@@ -20,6 +20,7 @@ public class EntryMatchService implements MatchingCheckService {
                 }
             }
         }
+
         return matchesString;
     }
 

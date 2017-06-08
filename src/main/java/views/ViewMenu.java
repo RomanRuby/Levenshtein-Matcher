@@ -4,7 +4,7 @@ import models.MatchingEnum;
 import org.apache.commons.lang3.StringUtils;
 import services.FileReaderService;
 import services.impl.DefaultFileReaderService;
-import threadScanners.InstanceScanner;
+import scanners.InstanceScanner;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,24 +33,24 @@ public class ViewMenu {
         return viewMenu;
     }
 
-    public void getMainMenu() {
+    public void runMainMenu() {
         while (run) {
-            getFilesMenu();
+            runFilesMenu();
         }
     }
 
-    private void getFilesMenu() {
+    private void runFilesMenu() {
         System.out.println(MenuTemplate.FILES_MENU.toString());
         String row = scanner.readRow();
         if (!StringUtils.isNumeric(row)) {
             System.out.println("Input must be number!");
-            getFilesMenu();
+            runFilesMenu();
             return;
         }
         int input = Integer.valueOf(row);
         switch (input) {
             case 1: {
-                inputFileHandler();
+                inputFileHandle();
                 break;
             }
             case 2: {
@@ -59,34 +59,34 @@ public class ViewMenu {
             }
             default:
                 System.out.println("Choose right option!");
-                getMainMenu();
+                runMainMenu();
         }
 
     }
 
-    private void getModeMenu(Map<String, List<String>> files) {
+    private void runModeMenu(Map<String, List<String>> files) {
         System.out.println(MenuTemplate.MODE_MENU.toString());
         String row = scanner.readRow();
         if (!StringUtils.isNumeric(row)) {
             System.out.println("Input must be number!");
-            getModeMenu(files);
+            runModeMenu(files);
             return;
         }
         int input = Integer.valueOf(row);
             switch (input) {
                 case 1: {
                     printResult(getResult(MatchingEnum.FullMatchMode, files));
-                    getResultMenu(files);
+                    runResultMenu(files);
                     break;
                 }
                 case 2: {
                     printResult(getResult(MatchingEnum.EntryMatchMode, files));
-                    getResultMenu(files);
+                    runResultMenu(files);
                     break;
                 }
                 case 3: {
                     printResult(getResult(MatchingEnum.LevenshteinMatchMode, files));
-                    getResultMenu(files);
+                    runResultMenu(files);
                     break;
                 }
                 case 4: {
@@ -95,27 +95,27 @@ public class ViewMenu {
                 }
                 default:
                     System.out.println("Choose right option!");
-                    getModeMenu(files);
+                    runModeMenu(files);
             }
 
         }
 
-    private void getResultMenu(Map<String, List<String>> files) {
+    private void runResultMenu(Map<String, List<String>> files) {
         System.out.println(MenuTemplate.RESULT_MENU.toString());
         String row = scanner.readRow();
         if (!StringUtils.isNumeric(row)) {
             System.out.println("Input must be number!");
-            getResultMenu(files);
+            runResultMenu(files);
             return;
         }
         int input = Integer.valueOf(row);
             switch (input) {
                 case 1: {
-                    getModeMenu(files);
+                    runModeMenu(files);
                     break;
                 }
                 case 2: {
-                    getFilesMenu();
+                    runFilesMenu();
                     break;
                 }
                 case 3: {
@@ -124,23 +124,23 @@ public class ViewMenu {
                 }
                 default:
                     System.out.println("Choose right option!");
-                    getResultMenu(files);
+                    runResultMenu(files);
             }
 
     }
 
-    private void ExceptionFilePatternMenu(String file) throws IllegalArgumentException {
+    private void runFilePatternMenu(String file) throws IllegalArgumentException {
         System.out.println(MenuTemplate.FILES_PATH_MENU.toString());
         String row = scanner.readRow();
         if (!StringUtils.isNumeric(row)) {
             System.out.println("Input must be number!");
-            ExceptionFilePatternMenu(file);
+            runFilePatternMenu(file);
             return;
         }
         int input = Integer.valueOf(row);
             switch (input) {
                 case 1: {
-                    patternFileHandler(file);
+                    patternFileHandle(file);
                     break;
                 }
                 case 2: {
@@ -153,18 +153,18 @@ public class ViewMenu {
 
     }
 
-    private void ExceptionFileInputMenu() throws IllegalArgumentException {
+    private void runFileInputMenu() throws IllegalArgumentException {
         System.out.println(MenuTemplate.FILES_PATH_MENU.toString());
         String row = scanner.readRow();
         if (!StringUtils.isNumeric(row)) {
             System.out.println("Input must be number!");
-            ExceptionFileInputMenu();
+            runFileInputMenu();
             return;
         }
         int input = Integer.valueOf(row);
             switch (input) {
                 case 1: {
-                    inputFileHandler();
+                    inputFileHandle();
                     break;
                 }
                 case 2: {
@@ -177,26 +177,28 @@ public class ViewMenu {
 
     }
 
-    private void inputFileHandler() {
+    private void inputFileHandle() {
         System.out.println("location input file with type txt ");
         String file = InstanceScanner.getInstance().readRow();
         if (fileReaderService.isCorrectPath(file)) {
-            patternFileHandler(file);
+            patternFileHandle(file);
             return;
         }
         System.out.println("Choose right path");
-        ExceptionFileInputMenu();
+        runFileInputMenu();
     }
 
-    private void patternFileHandler(String file) {
+    private void patternFileHandle(String file) {
         System.out.println("location patterns file with type txt");
         String patternFile = InstanceScanner.getInstance().readRow();
+
         if (fileReaderService.isCorrectPath(patternFile)) {
-            getModeMenu(readFiles(file, patternFile));
+            runModeMenu(readFiles(file, patternFile));
             return;
         }
+
         System.out.println("Choose right path");
-        ExceptionFilePatternMenu(file);
+        runFilePatternMenu(file);
     }
 
     private Map<String, List<String>> readFiles(String inputPath, String patternsPath) {
@@ -204,14 +206,16 @@ public class ViewMenu {
 
         files.put(INPUT_KEY, fileReaderService.readRows(inputPath));
         files.put(PATTERN_KEY, fileReaderService.readRows(patternsPath));
+
         return files;
     }
 
     private void printResult(List<String> result) {
-        if(result.size() == 0){
+        if(null == result || result.size() == 0){
             System.out.println("Empty list");
             return;
         }
+
         result.forEach(System.out::println);
     }
 

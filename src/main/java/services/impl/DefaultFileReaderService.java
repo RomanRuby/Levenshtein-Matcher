@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,11 +17,12 @@ import java.util.List;
  */
 public class DefaultFileReaderService implements FileReaderService {
 
-    private static final Logger LOGGER = LogManager.getLogger(DefaultFileReaderService.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(DefaultFileReaderService.class);
     private static FileReaderService fileReaderService;
 
+
     public static FileReaderService getInstance() {
-        if (fileReaderService == null) {
+        if (null == fileReaderService) {
             fileReaderService = new DefaultFileReaderService();
         }
         return fileReaderService;
@@ -32,8 +33,8 @@ public class DefaultFileReaderService implements FileReaderService {
         try {
             return Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            LOGGER.info("Info Message Logged", new IOException(e.toString()));
-            return new ArrayList<>();
+            LOGGER.info("Info Message Logged",e.getMessage());
+            return Collections.emptyList();
         }
     }
 

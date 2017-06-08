@@ -21,6 +21,7 @@ public class LevenshteinMatchService implements MatchingCheckService {
                      .filter(input -> StringUtils.getLevenshteinDistance(input, pattern) <= 1)
                      .collect(Collectors.toList()));
         }
+
         return matchesString;
     }
 

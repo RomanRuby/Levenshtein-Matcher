@@ -18,18 +18,19 @@ public enum MenuTemplate {
             return " "
                     + "\nEnter your option : "
                     + "\n 1 - mode output all the rows from input file that match exactly any row in pattern file "
-                    + "\n 2 - mode output all the lines from input.txt that contain a match from " +
-                    "patterns.txt somewhere in the line."
-                    + "\n 3 - mode output all the lines from input.txt that contain a match with " +
-                    "edit distance <= 1 patterns.txt"
+                    + "\n 2 - mode output all the lines from input.txt that contain a match from "
+                    + "patterns.txt somewhere in the line."
+                    + "\n 3 - mode output all the lines from input.txt that contain a match with "
+                    + "edit distance <= 1 patterns.txt"
                     + "\n 4 - exit"
                     + "\n Input number:";
         }
+
     },
     RESULT_MENU {
         @Override
         public String toString() {
-            return  " "
+            return " "
                     + "\n Enter your option : "
                     + "\n 1 - select different mode "
                     + "\n 2 - select new files "
