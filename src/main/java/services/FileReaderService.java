@@ -9,6 +9,6 @@ public interface FileReaderService {
 
     List<String> readRows(String filePath);
 
-    boolean checkCorrectPathAndType(String filePathString) throws IllegalArgumentException;
+    boolean isCorrectPath(String filePathString);
 
 }

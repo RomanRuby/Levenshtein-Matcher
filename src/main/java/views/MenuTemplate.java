@@ -52,7 +52,7 @@ public enum MenuTemplate {
         public String toString() {
             return " "
                     + "\n Enter your option : "
-                    + "\n 1 - location file"
+                    + "\n 1 - input file location"
                     + "\n 2 - exit"
                     + "\n Input number:";
         }

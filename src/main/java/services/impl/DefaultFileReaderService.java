@@ -3,7 +3,6 @@ package services.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import services.FileReaderService;
-import views.ViewMenu;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +17,7 @@ import java.util.List;
  */
 public class DefaultFileReaderService implements FileReaderService {
 
-    private static final Logger LOGGER = LogManager.getLogger(ViewMenu.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(DefaultFileReaderService.class.getName());
     private static FileReaderService fileReaderService;
 
     public static FileReaderService getInstance() {
@@ -39,8 +38,9 @@ public class DefaultFileReaderService implements FileReaderService {
     }
 
     @Override
-    public boolean checkCorrectPathAndType(String filePathString)  {
-        File file = new File(filePathString);
+    public boolean isCorrectPath(String filePath)  {
+        File file = new File(filePath);
         return (file.exists() && !file.isDirectory());
     }
+
 }
