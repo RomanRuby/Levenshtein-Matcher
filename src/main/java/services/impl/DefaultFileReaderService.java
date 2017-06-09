@@ -33,7 +33,7 @@ public class DefaultFileReaderService implements FileReaderService {
         try {
             return Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            LOGGER.info("Info Message Logged",e.getMessage());
+            LOGGER.info(e.getMessage());
             return Collections.emptyList();
         }
     }

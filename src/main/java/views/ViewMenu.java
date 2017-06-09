@@ -42,16 +42,17 @@ public class ViewMenu {
         System.out.println(MenuTemplate.FILES_MENU.toString());
         switch (scanner.readRow()) {
             case "1": {
-                inputFileHandle();
+                inputFileResolver();
                 break;
             }
             case "2": {
                 stop();
                 break;
             }
-            default:
+            default: {
                 System.out.println("Choose right option!");
                 runMainMenu();
+            }
         }
 
     }
@@ -78,9 +79,10 @@ public class ViewMenu {
                     stop();
                     break;
                 }
-                default:
+                default: {
                     System.out.println("Choose right option!");
                     runModeMenu(files);
+                }
             }
 
         }
@@ -100,9 +102,10 @@ public class ViewMenu {
                     stop();
                     break;
                 }
-                default:
+                default: {
                     System.out.println("Choose right option!");
                     runResultMenu(files);
+                }
             }
 
     }
@@ -111,15 +114,16 @@ public class ViewMenu {
         System.out.println(MenuTemplate.FILES_PATH_MENU.toString());
             switch (scanner.readRow()) {
                 case "1": {
-                    patternFileHandle(file);
+                    patternFileResolver(file);
                     break;
                 }
                 case "2": {
                     stop();
                     break;
                 }
-                default:
+                default:{
                     System.out.println("Choose right option!");
+                }
             }
 
     }
@@ -128,31 +132,32 @@ public class ViewMenu {
         System.out.println(MenuTemplate.FILES_PATH_MENU.toString());
             switch (scanner.readRow()) {
                 case "1": {
-                    inputFileHandle();
+                    inputFileResolver();
                     break;
                 }
                 case "2": {
                     stop();
                     break;
                 }
-                default:
-                    System.out.println("Choose right option!");
+                default:{
+                    System.out.println("Choose right option!");}
             }
 
     }
 
-    private void inputFileHandle() {
+    private void inputFileResolver() {
+
         System.out.println("location input file with type txt ");
         String file = InstanceScanner.getInstance().readRow();
         if (fileReaderService.isCorrectPath(file)) {
-            patternFileHandle(file);
+            patternFileResolver(file);
             return;
         }
         System.out.println("Choose right path");
         runFileInputMenu();
     }
 
-    private void patternFileHandle(String file) {
+    private void patternFileResolver(String file) {
         System.out.println("location patterns file with type txt");
         String patternFile = InstanceScanner.getInstance().readRow();
 
@@ -178,7 +183,6 @@ public class ViewMenu {
             System.out.println("Empty list");
             return;
         }
-
         result.forEach(System.out::println);
     }
 
