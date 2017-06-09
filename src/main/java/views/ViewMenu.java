@@ -59,89 +59,90 @@ public class ViewMenu {
 
     private void runModeMenu(Map<String, List<String>> files) {
         System.out.println(MenuTemplate.MODE_MENU.toString());
-            switch (scanner.readRow()) {
-                case "1": {
-                    printResult(getResult(MatchingEnum.FullMatchMode, files));
-                    runResultMenu(files);
-                    break;
-                }
-                case "2": {
-                    printResult(getResult(MatchingEnum.EntryMatchMode, files));
-                    runResultMenu(files);
-                    break;
-                }
-                case "3": {
-                    printResult(getResult(MatchingEnum.LevenshteinMatchMode, files));
-                    runResultMenu(files);
-                    break;
-                }
-                case "4": {
-                    stop();
-                    break;
-                }
-                default: {
-                    System.out.println("Choose right option!");
-                    runModeMenu(files);
-                }
+        switch (scanner.readRow()) {
+            case "1": {
+                printResult(getResult(MatchingEnum.FullMatchMode, files));
+                runResultMenu(files);
+                break;
             }
-
+            case "2": {
+                printResult(getResult(MatchingEnum.EntryMatchMode, files));
+                runResultMenu(files);
+                break;
+            }
+            case "3": {
+                printResult(getResult(MatchingEnum.LevenshteinMatchMode, files));
+                runResultMenu(files);
+                break;
+            }
+            case "4": {
+                stop();
+                break;
+            }
+            default: {
+                System.out.println("Choose right option!");
+                runModeMenu(files);
+            }
         }
+
+    }
 
     private void runResultMenu(Map<String, List<String>> files) {
         System.out.println(MenuTemplate.RESULT_MENU.toString());
-            switch (scanner.readRow()) {
-                case "1": {
-                    runModeMenu(files);
-                    break;
-                }
-                case "2": {
-                    runFilesMenu();
-                    break;
-                }
-                case "3": {
-                    stop();
-                    break;
-                }
-                default: {
-                    System.out.println("Choose right option!");
-                    runResultMenu(files);
-                }
+        switch (scanner.readRow()) {
+            case "1": {
+                runModeMenu(files);
+                break;
             }
+            case "2": {
+                runFilesMenu();
+                break;
+            }
+            case "3": {
+                stop();
+                break;
+            }
+            default: {
+                System.out.println("Choose right option!");
+                runResultMenu(files);
+            }
+        }
 
     }
 
     private void runFilePatternMenu(String file) throws IllegalArgumentException {
         System.out.println(MenuTemplate.FILES_PATH_MENU.toString());
-            switch (scanner.readRow()) {
-                case "1": {
-                    patternFileResolver(file);
-                    break;
-                }
-                case "2": {
-                    stop();
-                    break;
-                }
-                default:{
-                    System.out.println("Choose right option!");
-                }
+        switch (scanner.readRow()) {
+            case "1": {
+                patternFileResolver(file);
+                break;
             }
+            case "2": {
+                stop();
+                break;
+            }
+            default: {
+                System.out.println("Choose right option!");
+            }
+        }
 
     }
 
     private void runFileInputMenu() throws IllegalArgumentException {
         System.out.println(MenuTemplate.FILES_PATH_MENU.toString());
-            switch (scanner.readRow()) {
-                case "1": {
-                    inputFileResolver();
-                    break;
-                }
-                case "2": {
-                    stop();
-                    break;
-                }
-                default:{
-                    System.out.println("Choose right option!");}
+        switch (scanner.readRow()) {
+            case "1": {
+                inputFileResolver();
+                break;
             }
+            case "2": {
+                stop();
+                break;
+            }
+            default: {
+                System.out.println("Choose right option!");
+            }
+        }
 
     }
 
@@ -179,7 +180,7 @@ public class ViewMenu {
     }
 
     private void printResult(List<String> result) {
-        if(null == result || result.size() == 0){
+        if (null == result || result.size() == 0) {
             System.out.println("Empty list");
             return;
         }
