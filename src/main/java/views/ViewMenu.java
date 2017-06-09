@@ -1,10 +1,9 @@
 package views;
 
 import models.MatchingEnum;
-import org.apache.commons.lang3.StringUtils;
+import scanners.InstanceScanner;
 import services.FileReaderService;
 import services.impl.DefaultFileReaderService;
-import scanners.InstanceScanner;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,19 +40,12 @@ public class ViewMenu {
 
     private void runFilesMenu() {
         System.out.println(MenuTemplate.FILES_MENU.toString());
-        String row = scanner.readRow();
-        if (!StringUtils.isNumeric(row)) {
-            System.out.println("Input must be number!");
-            runFilesMenu();
-            return;
-        }
-        int input = Integer.valueOf(row);
-        switch (input) {
-            case 1: {
+        switch (scanner.readRow()) {
+            case "1": {
                 inputFileHandle();
                 break;
             }
-            case 2: {
+            case "2": {
                 stop();
                 break;
             }
@@ -66,30 +58,23 @@ public class ViewMenu {
 
     private void runModeMenu(Map<String, List<String>> files) {
         System.out.println(MenuTemplate.MODE_MENU.toString());
-        String row = scanner.readRow();
-        if (!StringUtils.isNumeric(row)) {
-            System.out.println("Input must be number!");
-            runModeMenu(files);
-            return;
-        }
-        int input = Integer.valueOf(row);
-            switch (input) {
-                case 1: {
+            switch (scanner.readRow()) {
+                case "1": {
                     printResult(getResult(MatchingEnum.FullMatchMode, files));
                     runResultMenu(files);
                     break;
                 }
-                case 2: {
+                case "2": {
                     printResult(getResult(MatchingEnum.EntryMatchMode, files));
                     runResultMenu(files);
                     break;
                 }
-                case 3: {
+                case "3": {
                     printResult(getResult(MatchingEnum.LevenshteinMatchMode, files));
                     runResultMenu(files);
                     break;
                 }
-                case 4: {
+                case "4": {
                     stop();
                     break;
                 }
@@ -102,23 +87,16 @@ public class ViewMenu {
 
     private void runResultMenu(Map<String, List<String>> files) {
         System.out.println(MenuTemplate.RESULT_MENU.toString());
-        String row = scanner.readRow();
-        if (!StringUtils.isNumeric(row)) {
-            System.out.println("Input must be number!");
-            runResultMenu(files);
-            return;
-        }
-        int input = Integer.valueOf(row);
-            switch (input) {
-                case 1: {
+            switch (scanner.readRow()) {
+                case "1": {
                     runModeMenu(files);
                     break;
                 }
-                case 2: {
+                case "2": {
                     runFilesMenu();
                     break;
                 }
-                case 3: {
+                case "3": {
                     stop();
                     break;
                 }
@@ -131,19 +109,12 @@ public class ViewMenu {
 
     private void runFilePatternMenu(String file) throws IllegalArgumentException {
         System.out.println(MenuTemplate.FILES_PATH_MENU.toString());
-        String row = scanner.readRow();
-        if (!StringUtils.isNumeric(row)) {
-            System.out.println("Input must be number!");
-            runFilePatternMenu(file);
-            return;
-        }
-        int input = Integer.valueOf(row);
-            switch (input) {
-                case 1: {
+            switch (scanner.readRow()) {
+                case "1": {
                     patternFileHandle(file);
                     break;
                 }
-                case 2: {
+                case "2": {
                     stop();
                     break;
                 }
@@ -155,19 +126,12 @@ public class ViewMenu {
 
     private void runFileInputMenu() throws IllegalArgumentException {
         System.out.println(MenuTemplate.FILES_PATH_MENU.toString());
-        String row = scanner.readRow();
-        if (!StringUtils.isNumeric(row)) {
-            System.out.println("Input must be number!");
-            runFileInputMenu();
-            return;
-        }
-        int input = Integer.valueOf(row);
-            switch (input) {
-                case 1: {
+            switch (scanner.readRow()) {
+                case "1": {
                     inputFileHandle();
                     break;
                 }
-                case 2: {
+                case "2": {
                     stop();
                     break;
                 }
@@ -196,7 +160,6 @@ public class ViewMenu {
             runModeMenu(readFiles(file, patternFile));
             return;
         }
-
         System.out.println("Choose right path");
         runFilePatternMenu(file);
     }
