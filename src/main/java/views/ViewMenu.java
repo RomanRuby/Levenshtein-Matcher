@@ -149,6 +149,7 @@ public class ViewMenu {
     private void inputFileResolver() {
         System.out.println("location input file with type txt ");
         String file = InstanceScanner.getInstance().readRow();
+
         if (fileReaderService.isCorrectPath(file)) {
             patternFileResolver(file);
             return;
