@@ -124,12 +124,13 @@ public class ViewMenu {
         String file = InstanceScanner.getInstance().readRow();
 
         if (fileReaderService.isCorrectPath(file)) {
-            if (null == inputFile) {
+            if (null == inputFile && !run) {
                 inputFile = file;
                 System.out.println("Choose the second file");
                 inputFileResolver();
             }
-            if (null == patternsFile) {
+
+            if (null == patternsFile && !run) {
                 patternsFile = file;
                 runModeMenu(readFiles(inputFile, patternsFile));
             }
