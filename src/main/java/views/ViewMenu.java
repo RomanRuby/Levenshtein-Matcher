@@ -129,11 +129,12 @@ public class ViewMenu {
                 System.out.println("Choose the second file");
                 inputFileResolver();
             }
-            patternsFile = file;
-            runModeMenu(readFiles(inputFile, patternsFile));
+            if (null == patternsFile) {
+                patternsFile = file;
+                runModeMenu(readFiles(inputFile, patternsFile));
+            }
             return;
         }
-
         System.out.println("Choose right path");
         runFilesMenu();
     }
