@@ -5,17 +5,13 @@ import scanners.InstanceScanner;
 import services.FileReaderService;
 import services.impl.DefaultFileReaderService;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Roman Nagibov
  */
 public class ViewMenu {
 
-    private static final String INPUT_KEY = "input";
-    private static final String PATTERN_KEY = "pattern";
     private static ViewMenu viewMenu;
     private final InstanceScanner scanner = InstanceScanner.getInstance();
     private final FileReaderService fileReaderService = DefaultFileReaderService.getInstance();
@@ -51,28 +47,27 @@ public class ViewMenu {
             }
             default: {
                 System.out.println("Choose right option!");
-                runMainMenu();
+                runFilesMenu();
             }
         }
-
     }
 
-    private void runModeMenu(Map<String, List<String>> files) {
+    private void runModeMenu(List<String> inputFileLines, List<String> patternFileLines) {
         System.out.println(MenuTemplate.MODE_MENU.toString());
         switch (scanner.readRow()) {
             case "1": {
-                printResult(getResult(MatchingEnum.FullMatchMode, files));
-                runResultMenu(files);
+                printResult(getResult(MatchingEnum.FullMatchMode, inputFileLines, patternFileLines));
+                runResultMenu(inputFileLines, patternFileLines);
                 break;
             }
             case "2": {
-                printResult(getResult(MatchingEnum.EntryMatchMode, files));
-                runResultMenu(files);
+                printResult(getResult(MatchingEnum.EntryMatchMode, inputFileLines, patternFileLines));
+                runResultMenu(inputFileLines, patternFileLines);
                 break;
             }
             case "3": {
-                printResult(getResult(MatchingEnum.LevenshteinMatchMode, files));
-                runResultMenu(files);
+                printResult(getResult(MatchingEnum.LevenshteinMatchMode, inputFileLines, patternFileLines));
+                runResultMenu(inputFileLines, patternFileLines);
                 break;
             }
             case "4": {
@@ -81,17 +76,17 @@ public class ViewMenu {
             }
             default: {
                 System.out.println("Choose right option!");
-                runModeMenu(files);
+                runModeMenu(inputFileLines, patternFileLines);
             }
         }
 
     }
 
-    private void runResultMenu(Map<String, List<String>> files) {
+    private void runResultMenu(List<String> inputFileLines, List<String> patternFileLines) {
         System.out.println(MenuTemplate.RESULT_MENU.toString());
         switch (scanner.readRow()) {
             case "1": {
-                runModeMenu(files);
+                runModeMenu(inputFileLines, patternFileLines);
                 break;
             }
             case "2": {
@@ -104,17 +99,17 @@ public class ViewMenu {
             }
             default: {
                 System.out.println("Choose right option!");
-                runResultMenu(files);
+                runResultMenu(inputFileLines, patternFileLines);
             }
         }
 
     }
 
-    private void runFilePatternMenu(String file) throws IllegalArgumentException {
+    private void runFilePatternMenu(String filePath) throws IllegalArgumentException {
         System.out.println(MenuTemplate.FILES_PATH_MENU.toString());
         switch (scanner.readRow()) {
             case "1": {
-                patternFileResolver(file);
+                patternFileResolver(filePath);
                 break;
             }
             case "2": {
@@ -123,60 +118,38 @@ public class ViewMenu {
             }
             default: {
                 System.out.println("Choose right option!");
-            }
-        }
-
-    }
-
-    private void runFileInputMenu() throws IllegalArgumentException {
-        System.out.println(MenuTemplate.FILES_PATH_MENU.toString());
-        switch (scanner.readRow()) {
-            case "1": {
-                inputFileResolver();
-                break;
-            }
-            case "2": {
-                stop();
-                break;
-            }
-            default: {
-                System.out.println("Choose right option!");
+                runFilePatternMenu(filePath);
             }
         }
 
     }
 
     private void inputFileResolver() {
-        System.out.println("location input file with type txt ");
-        String file = InstanceScanner.getInstance().readRow();
+        System.out.println("location input file ");
+        String filePath = InstanceScanner.getInstance().readRow();
 
-        if (fileReaderService.isCorrectPath(file)) {
-            patternFileResolver(file);
+        if (!fileReaderService.isCorrectPath(filePath)) {
+            System.out.println("Choose right path");
+            runFilesMenu();
             return;
         }
-        System.out.println("Choose right path");
-        runFileInputMenu();
+
+        patternFileResolver(filePath);
     }
 
-    private void patternFileResolver(String file) {
-        System.out.println("location patterns file with type txt");
-        String patternFile = InstanceScanner.getInstance().readRow();
+    private void patternFileResolver(String inputFilePath) {
+        System.out.println("location patterns file");
+        String patternFilePath = InstanceScanner.getInstance().readRow();
 
-        if (fileReaderService.isCorrectPath(patternFile)) {
-            runModeMenu(readFiles(file, patternFile));
+        if (!fileReaderService.isCorrectPath(patternFilePath)) {
+            System.out.println("Choose right path");
+            runFilePatternMenu(inputFilePath);
             return;
         }
-        System.out.println("Choose right path");
-        runFilePatternMenu(file);
-    }
 
-    private Map<String, List<String>> readFiles(String inputPath, String patternsPath) {
-        Map<String, List<String>> files = new HashMap<>();
-
-        files.put(INPUT_KEY, fileReaderService.readRows(inputPath));
-        files.put(PATTERN_KEY, fileReaderService.readRows(patternsPath));
-
-        return files;
+        List<String> inputRows = fileReaderService.readRows(inputFilePath);
+        List<String> patternRows = fileReaderService.readRows(patternFilePath);
+        runModeMenu(inputRows, patternRows);
     }
 
     private void printResult(List<String> result) {
@@ -187,8 +160,8 @@ public class ViewMenu {
         result.forEach(System.out::println);
     }
 
-    private List<String> getResult(MatchingEnum mode, Map<String, List<String>> files) {
-        return mode.getMode().match(files.get(INPUT_KEY), files.get(PATTERN_KEY));
+    private List<String> getResult(MatchingEnum mode, List<String> inputFileLines, List<String> patternFileLines) {
+        return mode.getMode().match(inputFileLines, patternFileLines);
     }
 
     private void stop() {
