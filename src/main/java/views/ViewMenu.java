@@ -17,6 +17,8 @@ public class ViewMenu {
     private static final String INPUT_KEY = "input";
     private static final String PATTERN_KEY = "pattern";
     private static ViewMenu viewMenu;
+    private static String inputFile;
+    private static String patternsFile;
     private final InstanceScanner scanner = InstanceScanner.getInstance();
     private final FileReaderService fileReaderService = DefaultFileReaderService.getInstance();
     private boolean run = true;
@@ -38,24 +40,6 @@ public class ViewMenu {
         }
     }
 
-    private void runFilesMenu() {
-        System.out.println(MenuTemplate.FILES_MENU.toString());
-        switch (scanner.readRow()) {
-            case "1": {
-                inputFileResolver();
-                break;
-            }
-            case "2": {
-                stop();
-                break;
-            }
-            default: {
-                System.out.println("Choose right option!");
-                runMainMenu();
-            }
-        }
-
-    }
 
     private void runModeMenu(Map<String, List<String>> files) {
         System.out.println(MenuTemplate.MODE_MENU.toString());
@@ -95,6 +79,7 @@ public class ViewMenu {
                 break;
             }
             case "2": {
+                clearFilesPath();
                 runFilesMenu();
                 break;
             }
@@ -110,26 +95,8 @@ public class ViewMenu {
 
     }
 
-    private void runFilePatternMenu(String file) throws IllegalArgumentException {
-        System.out.println(MenuTemplate.FILES_PATH_MENU.toString());
-        switch (scanner.readRow()) {
-            case "1": {
-                patternFileResolver(file);
-                break;
-            }
-            case "2": {
-                stop();
-                break;
-            }
-            default: {
-                System.out.println("Choose right option!");
-            }
-        }
-
-    }
-
-    private void runFileInputMenu() throws IllegalArgumentException {
-        System.out.println(MenuTemplate.FILES_PATH_MENU.toString());
+    private void runFilesMenu() {
+        System.out.println(MenuTemplate.FILES_MENU.toString());
         switch (scanner.readRow()) {
             case "1": {
                 inputFileResolver();
@@ -141,33 +108,34 @@ public class ViewMenu {
             }
             default: {
                 System.out.println("Choose right option!");
+                runMainMenu();
             }
         }
 
     }
 
+    private void clearFilesPath() {
+        inputFile = null;
+        patternsFile = null;
+    }
+
     private void inputFileResolver() {
-        System.out.println("location input file with type txt ");
+        System.out.println("Input path");
         String file = InstanceScanner.getInstance().readRow();
 
         if (fileReaderService.isCorrectPath(file)) {
-            patternFileResolver(file);
+            if (null == inputFile) {
+                inputFile = file;
+                System.out.println("Choose the second file");
+                inputFileResolver();
+            }
+            patternsFile = file;
+            runModeMenu(readFiles(inputFile, patternsFile));
             return;
         }
-        System.out.println("Choose right path");
-        runFileInputMenu();
-    }
 
-    private void patternFileResolver(String file) {
-        System.out.println("location patterns file with type txt");
-        String patternFile = InstanceScanner.getInstance().readRow();
-
-        if (fileReaderService.isCorrectPath(patternFile)) {
-            runModeMenu(readFiles(file, patternFile));
-            return;
-        }
         System.out.println("Choose right path");
-        runFilePatternMenu(file);
+        runFilesMenu();
     }
 
     private Map<String, List<String>> readFiles(String inputPath, String patternsPath) {

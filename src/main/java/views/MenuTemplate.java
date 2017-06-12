@@ -43,16 +43,6 @@ public enum MenuTemplate {
         public String toString() {
             return " "
                     + "\n Enter your option : "
-                    + "\n 1 - choose files "
-                    + "\n 2 - exit"
-                    + "\n Input number:";
-        }
-    },
-    FILES_PATH_MENU {
-        @Override
-        public String toString() {
-            return " "
-                    + "\n Enter your option : "
                     + "\n 1 - input file location"
                     + "\n 2 - exit"
                     + "\n Input number:";
