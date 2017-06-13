@@ -39,7 +39,7 @@ public class DefaultFileReaderService implements FileReaderService {
     }
 
     @Override
-    public boolean isCorrectPath(String filePath)  {
+    public boolean isCorrectPath(String filePath) {
         File file = new File(filePath);
         return (file.exists() && !file.isDirectory());
     }
