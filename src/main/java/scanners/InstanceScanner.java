@@ -15,6 +15,7 @@ public class InstanceScanner {
 
     private static final Logger LOGGER = LogManager.getLogger(InstanceScanner.class);
     private static InstanceScanner instance;
+
     private Scanner scanner = new Scanner(System.in);
     private ExecutorService executor = Executors.newFixedThreadPool(1);
 
