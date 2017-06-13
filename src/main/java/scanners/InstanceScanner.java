@@ -30,7 +30,7 @@ public class InstanceScanner {
     }
 
     public String readRow() {
-        Future<String> future = executor.submit(() -> scanner.nextLine());
+        Future<String> future = executor.submit(processSearchMessage);
         try {
             return future.get();
         } catch (InterruptedException | ExecutionException e) {
@@ -43,4 +43,5 @@ public class InstanceScanner {
         executor.shutdown();
     }
 
+    private Callable<String> processSearchMessage = () -> scanner.nextLine();
 }
