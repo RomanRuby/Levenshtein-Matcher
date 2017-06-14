@@ -2,8 +2,9 @@ package services.impl;
 
 import services.MatchingCheckService;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by Roman Nagibov
@@ -12,16 +13,7 @@ public class EntryMatchService implements MatchingCheckService {
 
     @Override
     public List<String> match(List<String> inputList, List<String> patternList) {
-        List<String> matchesString = new ArrayList<>();
-        for (String input : inputList) {
-            for (String pattern : patternList) {
-                if (input.contains(pattern)) {
-                    matchesString.add(input);
-                }
-            }
-        }
-
-        return matchesString;
+        return inputList.stream().filter(p -> patternList.stream().anyMatch(p::contains)).collect(toList());
     }
 
 }
